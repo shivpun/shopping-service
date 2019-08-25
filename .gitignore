@@ -21,3 +21,18 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+/.project
+/.settings/
+/shopping-core/.classpath
+/shopping-core/.project
+/shopping-core/.settings/
+/shopping-web/.classpath
+/shopping-web/.project
+/shopping-web/.settings/
+/shopping-integration/.classpath
+/shopping-integration/.project
+/shopping-integration/.settings/
+/shopping-integration/sale_order_*
+/shopping-core/target/
+/shopping-integration/target/
+/shopping-web/target/

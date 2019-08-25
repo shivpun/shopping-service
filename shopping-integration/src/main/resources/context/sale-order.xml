@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jms="http://www.springframework.org/schema/integration/jms"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-xml="http://www.springframework.org/schema/integration/xml"
+	xmlns:int-jpa="http://www.springframework.org/schema/integration/jpa"
+	xmlns:int-file="http://www.springframework.org/schema/integration/file"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/integration/file https://www.springframework.org/schema/integration/file/spring-integration-file.xsd
+	http://www.springframework.org/schema/integration/jpa https://www.springframework.org/schema/integration/jpa/spring-integration-jpa.xsd
+	http://www.springframework.org/schema/integration https://www.springframework.org/schema/integration/spring-integration.xsd
+	http://www.springframework.org/schema/integration/xml https://www.springframework.org/schema/integration/xml/spring-integration-xml.xsd
+	http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd">
+
+	<jms:message-driven-channel-adapter
+		id="helloJMSAdapater" container="JMS_QUEUE" channel="sale-order"
+		error-channel="sale-offline" />
+
+	<int:channel id="sale-order" />
+	<int:channel id="jpa-sale_order" />
+	<int:channel id="sale-offline" />
+	<int:chain id="sale-Chain" input-channel="sale-order"
+		output-channel="jpa-sale_order">
+		<int-xml:unmarshalling-transformer
+			unmarshaller="sale-jaxbMarshaller" />
+	</int:chain>
+
+	<int-jpa:outbound-channel-adapter
+		entity-class="org.shopping.entity.Order" channel="jpa-sale_order"
+		entity-manager-factory="entityManagerFactory">
+		<int-jpa:transactional
+			transaction-manager="transactionManager" />
+	</int-jpa:outbound-channel-adapter>
+
+	<int:chain id="sale-Chain-error" input-channel="sale-offline">
+		<int:service-activator ref="saleOrderService" method="errorMeesage"/>
+		<int:transformer ref="SaleOrderTransform" method="marshall" requires-reply="false"/>
+	</int:chain>
+	
+	<bean id="saleOrderService" class="com.shopping.integration.service.SaleOrderService"/>
+	<bean id="SaleOrderTransform" class="com.shopping.integration.transform.SaleOrderTransform"/>
+	
+	<bean id="sale-jaxbMarshaller"
+		class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+		<property name="classesToBeBound">
+			<list>
+				<value>org.shopping.entity.Order</value>
+				<value>org.shopping.entity.OrderLine</value>
+			</list>
+		</property>
+	</bean>
+</beans>

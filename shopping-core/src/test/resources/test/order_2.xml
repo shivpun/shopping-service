@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<order orderId="1">
+    <userId>ABC</userId>
+    <orderLines>
+        <orderLine code="1">
+            <productCode>PO001</productCode>
+            <productName>Product 1</productName>
+            <cost>25.0</cost>
+        </orderLine>
+        <orderLine code="2">
+            <productCode>PO002</productCode>
+            <productName>Product 2</productName>
+            <cost>15.0</cost>
+        </orderLine>
+    </orderLines>
+</order>
