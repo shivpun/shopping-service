@@ -67,9 +67,6 @@ public class Order implements Serializable {
 
 	public void setOrderLines(Set<OrderLine> orderLines) {
 		this.orderLines = orderLines;
-		for (OrderLine line : orderLines) {
-			// line.setOrder(this);
-		}
 	}
 
 	public void addOrderLine(OrderLine orderLine) {
@@ -77,7 +74,6 @@ public class Order implements Serializable {
 			this.orderLines = new HashSet<OrderLine>();
 		}
 		if (orderLine != null && !this.orderLines.contains(orderLine)) {
-			// orderLine.setOrder(this);
 			this.orderLines.add(orderLine);
 		}
 	}
