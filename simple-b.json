@@ -1,0 +1,9 @@
+{
+	"lastName":"Tiwari",
+	"firstName": "Punit",
+	"cost":23,
+	"contact": {
+		"email":"punit.tiwari"
+	},
+	"parameters": [1,2,3]
+}
